@@ -4,6 +4,8 @@
 
 AI-infused VR travel assistant, to explore language, culture, and life.
 
+> Built for [TreeHacks 2024](https://treehacks-2024.devpost.com/).
+
 ### Inspiration
 
 Have you ever found yourself wandering in a foreign land, eyes wide with wonder, yet feeling that pang of curiosity about the stories behind the unfamiliar sights and sounds? That's exactly where we found ourselves. All four of us share a deep love for travel and an insatiable curiosity about the diverse cultures, breathtaking scenery, and intriguing items we encounter abroad. It sparked an idea: why not create a travel companion that not only shares our journey but enhances it? Enter our brainchild, a fusion of VR and AI designed to be your personal travel buddy. Imagine having a friend who can instantly transcribe signs in foreign languages, identify any object from monuments to local flora, and guide you through the most bewildering of environments. That's what we set out to build—a gateway to a richer, more informed travel experience.
