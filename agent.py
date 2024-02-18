@@ -16,6 +16,7 @@ Your output will be transcribed to speech and played to the user. So, when respo
 4. If technical terms or jargon are unavoidable, provide a brief spoken explanation.
 5. Articulate numbers as they would be spoken. For example, use 'two point two' instead of '2.2'.
 6. Avoid complex punctuation. Use simple sentence structures conducive to spoken language.
+7. Response in a concise manner.
 
 Remember, your goal is to provide responses that are clear, concise, and easily understood when spoken aloud.
 """
@@ -27,11 +28,11 @@ class Agent:
         prompt = hub.pull("hwchase17/openai-tools-agent")
         prompt.messages[0].prompt.template = new_prompt
         model = ChatOpenAI(model="gpt-4-turbo-preview", temperature=0, streaming=True)
-        print("All tools" , tools)
+        print("All tools", tools)
         agent = create_openai_tools_agent(
             model.with_config({"tags": ["agent_llm"]}), tools, prompt
         )
-        self.executor = AgentExecutor(agent=agent, tools=tools,verbose=True)
+        self.executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
     async def invoke(self, message):
         async for event in self.executor.astream_events(

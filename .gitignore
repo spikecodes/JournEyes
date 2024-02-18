@@ -1,3 +1,4 @@
 *.env
+venv
 treehacks-service-key.json
 treehacks-service-key.json
