@@ -7,6 +7,8 @@ from io import BytesIO
 from lang_sam import LangSAM
 import cv2
 
+model = LangSAM(sam_type='vit_b')
+
 def download_image(url):
     response = requests.get(url)
     response.raise_for_status()
@@ -126,3 +128,14 @@ def add_padding_and_display(image, box, padding_ratio=0.1):
     cropped_image = image.crop((x_min_padded, y_min_padded, x_max_padded, y_max_padded))
     
     return cropped_image
+
+def process_image_and_text(text, image):
+    
+    masks, boxes, phrases, logits = model.predict(image, text)
+    
+    image = add_padding_and_display(image, boxes[0])
+    
+    # Save image then return
+    image.save("output.jpg")
+    
+    return image
