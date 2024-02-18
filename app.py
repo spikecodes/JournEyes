@@ -202,14 +202,14 @@ async def process_image(request: ImageTextRequest):
 
 async def transcribe_base64_audio(base64_audio):
     # Check for header
-    if base64_audio.startswith("data:audio/mp3;base64,") or base64_audio.startswith("data:audio/mpeg;base64,"):
+    if base64_audio.startswith("data:audio/wav;base64,"):
         base64_audio = base64_audio.split(",", 1)[1]  # Ensure we remove the entire header
     
     # Decode the base64 audio to binary
     audio_data = base64.b64decode(base64_audio)
 
     # Create a temporary file to store the decoded audio
-    with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as temp_audio_file:
+    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_audio_file:
         temp_audio_file.write(audio_data)
         temp_file_name = temp_audio_file.name
     
