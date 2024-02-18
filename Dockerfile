@@ -1,37 +1,26 @@
-# Use an official Python runtime as a parent image
-FROM python:3.9-slim as builder
+# Use an official Python runtime as a base image
+FROM python:3.9-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Set work directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Install dependencies
-COPY requirements.txt .
+# Copy the current directory contents into the container at /app
+COPY . .
+
+# Install any needed packages specified in requirements.txt
 RUN pip install --upgrade pip && \
-    pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.txt
+    pip install -r requirements.txt
 
-# Use an official Python runtime as a base image
-FROM python:3.9-slim
+# Make port 4008 available to the world outside this container
+EXPOSE 4008
 
-# Create and switch to a new user
-RUN useradd --create-home appuser
-WORKDIR /home/appuser
-USER appuser
+# Define environment variable for Uvicorn
+ENV UVICORN_HOST=0.0.0.0
+ENV UVICORN_PORT=4008
 
-# Copy the built wheels from the builder stage
-COPY --from=builder /app/wheels /wheels
-COPY --from=builder /app/requirements.txt .
-
-# Install the app dependencies
-RUN pip install --no-cache /wheels/*
-
-# Copy only the directories and files you need
-COPY --chown=appuser:appuser ./segment_anything ./segment_anything
-COPY --chown=appuser:appuser ./lang_sam ./lang_sam
-COPY --chown=appuser:appuser ./*.py ./
-
-# Your FastAPI app command to run
+# Run the FastAPI app when the container launches using Uvicorn
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "4008"]
