@@ -21,5 +21,5 @@ def index():
 # Define SocketIO events
 @sio.on('connect')
 async def connect(sid, environ):
-    print("Client connected", sid)
+    print("Client connected", sid) 
 
