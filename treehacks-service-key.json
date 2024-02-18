@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "treehack-414621",
+  "private_key_id": "98fe980f3e048c185685988f38246ee6bb93df97",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDIe7473oPrpG1P\nQM3mO4A+Jc6uJztDS04uv2YxCsbzVERzjE0/OmGdjZPJTcHO0CcSNnqUxtkZ77Wr\nUqO//1M2NcWMRQB0giMzn+AykjhaNKq0gjjT3tat6MyGnie9FFCJUYK27OrJB10l\nnQRtBdf/2u08/2IFPuHmstUMHXWZhzMUqDE9FxJPmieuA7s8QJ0tRdcqQVwsI4zb\nh3hpEdopg8fM3AXNzDNfpI5/PAmyCWl6e8Pf+Gdmc/tc239an06wIBdiSyQvUd5x\nIPuFf3Z5aUD0m3ucW4tUnKpB+7Adw+V+P9LZY66hVmAd8Pw4r1fMzuGVY81TBUT1\n+shwf589AgMBAAECggEALy3DnjYmiEkI+joPWitNahKemSgdT6BElUawZ0EYgYGm\nnCR7tzHnb9q12Q0F20PrteMBJMrIo0xgTaFkbJXKwLqVswU37rMDUq5AZdY4Ea5M\nL69nbSCHF6TtoI5OXrYNn8sBPkfxln43otbZCEj0RD8CTjTxHbfnFFGoRjIWjxqx\nu3bZgUKwOVwzyVZ+/8+XF7yWZez0Rgf+QHmLqz4sxF3brMN4kIcaTjiwSnmsz4E2\nDMXJnvxINNfDdcCLl1RQyoyNgHNHassaaBwPFadYKZuaSmis+42No24A0HLbLoKU\nitph03XvUWpnIm7VXOa7CCZo8ZGwoIHl+MSaPYJ7cQKBgQDmn9vS510KisUsUAOs\nlboRLYT3lJklu+tzD4bwtxOROYDM8f3vRwCQs6PphCVMXWI4fx+rtwuDc5TokYEg\nNAm/Aqq4fOMYaYdNeNu2nZ3JVIF4yt2rhL8mDa7JEYHDhCx/qmLdWz0q/+9nZJr4\npltuHiUHOHNiuJyWUUlLKJrSRQKBgQDeiuHQqNXVigOhnXQ4eaX6mhSuHFYmzV53\nBsIOjvJkN69A05g94hI+Gcfqr6V4f9oZle75Nu2mmsWjdrjoAzipiG/NA8DWP18I\nqZ2/YP+MrVRGg/EQgFeuLCLJCdbHDhJHvActBPsWFCgX3/zSau2fL/i9H8CmMNRr\nTmSrIlFkmQKBgAs/KH00gzkMY2kxzbwQ4S4NRjq8qGtKqsTFsRL0GqQuZbWY54VP\ntRtZZ1jv9NGwjCWtLWI2Xv1eGZjt35oub3s9Kg4tKPX7z3lbt3tEXHmBAX9ehUjk\nBF5atHdhvy5Ft9XR/VhGJsl+CbLFGTmfAz5vgebEPfxGfHxoImbj6AjxAoGAZG1a\nQHagoQ/6WYmbtAy5qWC1KmlhO3t8QMyM8FLz8ePrM58JWgvWXa32uOLxEnLn8pnl\n0RNHpeK8g+sEwLcLb/5BLcyezlCky1z38jCMwmhJ2tSaCe9RIimKvRyyjvu7piGl\nP1y7DpikCzoqdq6Ic0kLwBU/NABfK9mhtlTzVCkCgYBLss0CK8TnXOUL1cwx8ipP\nSG7DoNxOuMGyopaI8BgGSthkNY84VU1ytJHktyuhMSCd3z7x+4fR+OQRo5Vi7CJB\nJAI7GErSvdBj9Jvq2Y9pOpMk2xpBcyb9yPUk2kZc8xwbJFQtF4ZcHpgg0WTRiv2/\n50l5j4UAzMvI0Hl7FhNlEA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "treehacks@treehack-414621.iam.gserviceaccount.com",
+  "client_id": "115008631034951569118",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/treehacks%40treehack-414621.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
