@@ -20,24 +20,16 @@ Your output will be transcribed to speech and played to the user. So, when respo
 Remember, your goal is to provide responses that are clear, concise, and easily understood when spoken aloud.
 """
 
+
 class Agent:
     def __init__(self, tools):
         """tools should be list of functions"""
         prompt = hub.pull("hwchase17/openai-tools-agent")
         prompt.messages[0].prompt.template = new_prompt
         model = ChatOpenAI(model="gpt-4-turbo-preview", temperature=0, streaming=True)
-        search = GoogleSerperAPIWrapper()
-        google_search = Tool(
-            name="google_search",
-            func=search.run,
-            description="Searches Google for the input query",
-        )
-        
-        print("Received tools:", tools)
-
-        agent_tools = tools + [google_search]
+        print("All tools" , tools)
         agent = create_openai_tools_agent(
-            model.with_config({"tags": ["agent_llm"]}), agent_tools, prompt
+            model.with_config({"tags": ["agent_llm"]}), tools, prompt
         )
         self.executor = AgentExecutor(agent=agent, tools=tools,verbose=True)
 

@@ -29,13 +29,6 @@ client = AsyncOpenAI()
 # Initialize FastAPI and SocketIO
 app = FastAPI()
 from fastapi.middleware.cors import CORSMiddleware
-origins = ["*"]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_methods=["POST"],
-    allow_headers=["*"],
-)   
 sio = socketio_mount(app)
 elevenlabs_api_key = os.getenv("ELEVENLABS_API_KEY")
 voice = {
@@ -55,10 +48,12 @@ model = {
 
 current_image = None
 
+
+
 @tool
 def google_lens_wrapper(text: str) -> str:
     """
-    Performs a google lens search on the current image.
+    Performs a google lens search on the current image for object detection.
     
     Input:
     - text: a short description of the object to search for.
@@ -68,11 +63,16 @@ def google_lens_wrapper(text: str) -> str:
     try:
         print("Cropping image based on text:", text)
         global current_image
+        # Remove header if present
+        if ';base64,' in current_image:
+            current_image = current_image.split(';base64,')[1]
         # Decode the base64 image
         image_bytes = base64.b64decode(current_image)
         image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        print("Image opened")
 
         processed_image = process_image_and_text(text, image)
+        print("Image processed")
 
         # Convert the processed image back to base64 to send back as response
         buffered = io.BytesIO()
@@ -81,6 +81,52 @@ def google_lens_wrapper(text: str) -> str:
         return google_lens_search(current_image)
     except Exception as e:
         return f"Error: {e}"
+@tool
+async def vision_llm(text: str) -> str:
+    """
+    Uses the OPENAI Vision API to answer a question based on the input image.
+    
+    Input:
+    - text: a question about the image.
+    
+    Returns: The answer to the question based on the image.
+    """
+    global current_image
+    
+    response = await client.chat.completions.create(
+        model="gpt-4-vision-preview",
+        temperature=0,
+        max_tokens=500,
+        messages = [
+            {
+                'role': 'user',
+                "content": [
+                    {"type": "text", "text": "What’s in this image?"},
+                    {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": current_image,
+                    },
+                    },
+                ],
+            }
+        ]
+    )
+    
+    return response.choices[0].message.content
+    
+from langchain.agents import Tool
+from langchain.tools import tool
+
+from langchain_community.utilities import GoogleSerperAPIWrapper
+    
+search = GoogleSerperAPIWrapper()
+google_search = Tool(
+            name="google_search",
+            func=search.run,
+            description="Searches Google for the input query",
+)
+
 
 @app.get('/')
 def index():
@@ -94,7 +140,9 @@ async def connect(sid, environ):
 @sio.on('disconnect')
 async def disconnect(sid):
     print("Client disconnected", sid)
-    
+
+tools = [google_lens_wrapper, google_search, vision_llm]
+agent = Agent(tools)
 @sio.on('event')
 async def segment_image(sid, data):
     """
@@ -107,12 +155,11 @@ async def segment_image(sid, data):
     current_image = image_data
     
     text = await transcribe_base64_audio(audio)
-    tools = [google_lens_wrapper]
-    agent = Agent(tools)
+    print("Transcribed text:", text)
     
     async def stream_response():
         async for content in agent.invoke(text):
-            sio.emit('text', content)
+            await sio.emit('text', content)
             
     await stream_response()
     
@@ -128,8 +175,7 @@ async def segment_image(sid, data):
     current_image = image_data
     
     text = await transcribe_base64_audio(audio)
-    tools = [google_lens_wrapper]
-    agent = Agent(tools)
+    print("Transcribed text:", text)
     
     async def generate_stream_input(first_text_chunk, text_generator, voice, model):
         BOS = json.dumps(
@@ -158,11 +204,11 @@ async def segment_image(sid, data):
             async for text_chunk in text_chunker(text_generator):
                 data = dict(text=text_chunk, try_trigger_generation=True)
                 websocket.send(json.dumps(data))
-                sio.emit('text', text_chunk)
+                await sio.emit('text', text_chunk)
                 try:
                     data = json.loads(websocket.recv(1e-4))
                     if data["audio"]:
-                        sio.emit('audio', base64.b64decode(data["audio"]))  # type: ignore
+                        await sio.emit('audio', base64.b64decode(data["audio"]))  # type: ignore
                 except TimeoutError:
                     pass
 

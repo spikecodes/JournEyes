@@ -6,15 +6,27 @@ import {useRouter} from 'next/navigation'
 import io from 'socket.io-client'
 // import Audio from "@/assets/audio.svg";
 let RecordRTC
-const socket = io('https://api.art3m1s.me', {
-  path: '/treehacks/socket.io',
-})
+const socket = io('https://8d74cc6176ee.ngrok.app/')
 export default function RecordForm() {
   const router = useRouter()
 
   const [recording, setRecording] = useState(false)
   const [audio, setAudio] = useState(null)
   const [image, setImage] = useState(null)
+
+  useEffect(() => {
+    if (socket) {
+      // Listen to an event, for example, 'message'
+      socket.on('text', (data) => {
+        console.log(data)
+      })
+
+      // Clean up event listener on component unmount
+      return () => {
+        socket.off('text')
+      }
+    }
+  }, [socket])
 
   // Recording states
   const recorder = useRef(null)
@@ -44,7 +56,7 @@ export default function RecordForm() {
     if (file) {
       const reader = new FileReader()
       reader.onloadend = () => {
-        console.log(reader.result) // This will log the base64 string of the image
+        // This will log the base64 string of the image
         setImage(reader.result)
       }
       reader.readAsDataURL(file)
@@ -88,36 +100,17 @@ export default function RecordForm() {
     console.log(recorder.current)
     const audioBlob = recorder.current.getBlob()
     setRecording(false)
-    setLoading(true)
-
     const reader = new FileReader()
     reader.readAsDataURL(audioBlob)
     reader.onloadend = () => {
       let base64Audio = reader.result
-      console.log(base64Audio)
+
       setAudio(base64Audio)
     }
   }
 
-  const sendAudioToServer = async (base64Audio) => {
-    try {
-      const response = await fetch('http://127.0.0.1:8000/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          data: base64Audio,
-        }),
-      })
-
-      const data = await response.json()
-      setInputVal(data.transcript)
-    } catch (error) {
-      console.error('Error sending audio to server: ', error)
-    } finally {
-      recorder.current.microphone.stop()
-    }
+  const sendAudioToServer = async () => {
+    socket.emit('event', {audio: audio, image: image})
   }
 
   const stopRecording = () => {
@@ -165,7 +158,7 @@ export default function RecordForm() {
       <button
         onClick={() => {
           console.log('Sending')
-          socket.emit('send-image', {image})
+          sendAudioToServer()
         }}
         className="font-bold bg-black hover:bg-purple transition-all w-[176px] h-[56px] rounded-[8px] mt-[2rem] text-[#FFFFFF]"
       >
