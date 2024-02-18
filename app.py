@@ -28,6 +28,14 @@ client = AsyncOpenAI()
 
 # Initialize FastAPI and SocketIO
 app = FastAPI()
+from fastapi.middleware.cors import CORSMiddleware
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_methods=["POST"],
+    allow_headers=["*"],
+)   
 sio = socketio_mount(app)
 elevenlabs_api_key = os.getenv("ELEVENLABS_API_KEY")
 voice = {

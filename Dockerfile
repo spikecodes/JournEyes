@@ -9,11 +9,13 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY . .
+COPY requirements.txt .
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
+
+COPY . .
 
 # Make port 4008 available to the world outside this container
 EXPOSE 4008
@@ -23,4 +25,4 @@ ENV UVICORN_HOST=0.0.0.0
 ENV UVICORN_PORT=4008
 
 # Run the FastAPI app when the container launches using Uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "4008"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "4008"]
